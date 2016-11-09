@@ -195,7 +195,7 @@ trait Billable
      * Get a subscription instance by name.
      *
      * @param  string  $subscription
-     * @return \Laravel\Cashier\Subscription|null
+     * @return \Laravel\Cashier\SubscriptionModel|null
      */
     public function subscription($subscription = 'default')
     {
@@ -214,7 +214,7 @@ trait Billable
      */
     public function subscriptions()
     {
-        return $this->hasMany(Subscription::class, $this->getForeignKey())->orderBy('created_at', 'desc');
+        return $this->hasMany(SubscriptionModel::class, $this->getForeignKey())->orderBy('created_at', 'desc');
     }
 
     /**

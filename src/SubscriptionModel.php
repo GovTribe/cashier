@@ -5,9 +5,10 @@ namespace Laravel\Cashier;
 use Carbon\Carbon;
 use LogicException;
 use DateTimeInterface;
-use Illuminate\Database\Eloquent\Model;
 
-class Subscription extends Model
+use GovTribe\Contracts\Entity\EntityModel;
+
+class SubscriptionModel extends EntityModel
 {
     /**
      * The attributes that aren't mass assignable.
@@ -171,7 +172,7 @@ class Subscription extends Model
         $subscription = $this->asStripeSubscription();
 
         $subscription->quantity = $quantity;
-        
+
         $subscription->prorate = $this->prorate;
 
         $subscription->save();
