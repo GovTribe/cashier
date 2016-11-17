@@ -214,6 +214,7 @@ trait Billable
      */
     public function subscriptions()
     {
+
         return $this->hasMany(SubscriptionModel::class, $this->getForeignKey())->orderBy('created_at', 'desc');
     }
 

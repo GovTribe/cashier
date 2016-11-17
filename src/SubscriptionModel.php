@@ -3,13 +3,20 @@
 namespace Laravel\Cashier;
 
 use Carbon\Carbon;
+use GovTribe\Contracts\Routable\RoutableInterface;
+use GovTribe\Contracts\Routable\RoutableTrait;
 use LogicException;
 use DateTimeInterface;
 
 use GovTribe\Contracts\Entity\EntityModel;
+use GovTribe\Web\Providers\Plan\PlanModel;
 
-class SubscriptionModel extends EntityModel
+class SubscriptionModel extends EntityModel implements RoutableInterface
+
+
 {
+    use RoutableTrait;
+
     /**
      * The attributes that aren't mass assignable.
      *
@@ -24,8 +31,49 @@ class SubscriptionModel extends EntityModel
      */
     protected $dates = [
         'trial_ends_at', 'ends_at',
-        'created_at', 'updated_at',
     ];
+
+    /*
+     * START ADDED BY GOVTRIBE ***************************
+     *
+     *
+     *
+     *
+     */
+    protected $fillable = [
+        'stripe_id', 'name',
+        'stripe_plan', 'trial_ends_at',
+        'ends_at'
+    ];
+
+    protected $appends = [
+        'govTribePlan',
+        'modelClass',
+        'route'
+
+    ];
+
+    public function getGovTribePlanAttribute() : PlanModel
+    {
+        return PlanModel::where('sku', $this->stripe_plan)->get()->first();
+    }
+
+    public function getRouteAttribute(): string
+    {
+        return url(model_route_prefix($this), [$this->getKey()]);
+    }
+
+
+    /*
+     *
+     *
+     *
+     *
+     *
+     *
+     * END ADDED BY GOVTRIBE *******************************
+     *
+     */
 
     /**
      * Indicates if the plan change should be prorated.
