@@ -3,17 +3,16 @@
 namespace Laravel\Cashier;
 
 use Carbon\Carbon;
-use GovTribe\Contracts\Routable\RoutableInterface;
-use GovTribe\Contracts\Routable\RoutableTrait;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use LogicException;
 use DateTimeInterface;
 
 use GovTribe\Contracts\Entity\EntityModel;
 use GovTribe\Web\Providers\Plan\PlanModel;
+use GovTribe\Contracts\Routable\RoutableInterface;
+use GovTribe\Contracts\Routable\RoutableTrait;
 
 class SubscriptionModel extends EntityModel implements RoutableInterface
-
-
 {
     use RoutableTrait;
 
@@ -49,7 +48,7 @@ class SubscriptionModel extends EntityModel implements RoutableInterface
     protected $appends = [
         'govTribePlan',
         'modelClass',
-        'route'
+        'routes'
 
     ];
 
@@ -58,9 +57,9 @@ class SubscriptionModel extends EntityModel implements RoutableInterface
         return PlanModel::where('sku', $this->stripe_plan)->get()->first();
     }
 
-    public function getRouteAttribute(): string
+    public function account() : BelongsTo
     {
-        return url(model_route_prefix($this), [$this->getKey()]);
+        return $this->owner();
     }
 
 
@@ -92,9 +91,9 @@ class SubscriptionModel extends EntityModel implements RoutableInterface
     /**
      * Get the user that owns the subscription.
      */
-    public function user()
+    public function user(): BelongsTo
     {
-        return $this->owner();
+        return $this->account->owner();
     }
 
     /**
