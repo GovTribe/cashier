@@ -9,12 +9,10 @@ use DateTimeInterface;
 
 use GovTribe\Contracts\Entity\EntityModel;
 use GovTribe\Web\Providers\Plan\PlanModel;
-use GovTribe\Contracts\Routable\RoutableInterface;
-use GovTribe\Contracts\Routable\RoutableTrait;
 
-class SubscriptionModel extends EntityModel implements RoutableInterface
+class SubscriptionModel extends EntityModel
 {
-    use RoutableTrait;
+
 
     /**
      * The attributes that aren't mass assignable.
@@ -48,8 +46,6 @@ class SubscriptionModel extends EntityModel implements RoutableInterface
     protected $appends = [
         'govTribePlan',
         'modelClass',
-        'routes'
-
     ];
 
     public function getGovTribePlanAttribute() : PlanModel
@@ -61,7 +57,6 @@ class SubscriptionModel extends EntityModel implements RoutableInterface
     {
         return $this->owner();
     }
-
 
     /*
      *
@@ -93,7 +88,7 @@ class SubscriptionModel extends EntityModel implements RoutableInterface
      */
     public function user(): BelongsTo
     {
-        return $this->account->owner();
+        return $this->owner();
     }
 
     /**
